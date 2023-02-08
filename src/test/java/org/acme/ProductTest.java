@@ -1,7 +1,10 @@
 package org.acme;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -29,4 +32,38 @@ public class ProductTest {
                 .body("title", is("Product1"));
     }
 
+    @Test
+    public void testCreate() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(Map.of("title", "foo", "description", "bar"))
+                .when().post("/products")
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
+    public void testUpdate() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(Map.of("title", "foobar"))
+                .when().put("/products/1")
+                .then()
+                .statusCode(200)
+                .body("id", is(1))
+                .body("title", is("foobar"));
+    }
+
+    @Test
+    public void testDelete() {
+        given()
+                .when().delete("/products/1")
+                .then()
+                .statusCode(200);
+
+        given()
+                .when().get("/product/1")
+                .then()
+                .statusCode(404);
+    }
 }
