@@ -34,7 +34,6 @@ public class Product extends PanacheEntityBase {
     @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     public ZonedDateTime updatedAt;
 
-    // private static final Logger LOG = Logger.getLogger(Product.class);
     private static final Logger LOG = LoggerFactory.getLogger(Product.class);
 
     public static Uni<Product> findByProductId(Long id) {
@@ -52,7 +51,7 @@ public class Product extends PanacheEntityBase {
 
         return Panache.withTransaction(() -> Product.findByProductId(id)
                 .onItem().ifNotNull()
-                .transform( entity -> {
+                .transform(entity -> {
                     entity.title = product.title;
                     entity.description = product.description;
                     return entity;
@@ -68,6 +67,5 @@ public class Product extends PanacheEntityBase {
         return Panache.withTransaction(() -> deleteById(id));
 
     }
-
 
 }

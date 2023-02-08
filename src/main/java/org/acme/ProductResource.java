@@ -58,8 +58,4 @@ public class ProductResource {
 
     }
 
-    private static Uni<Response> notImplemented() {
-        return Uni.createFrom().item(Response.serverError().status(NOT_IMPLEMENTED).build());
-    }
-
 }
