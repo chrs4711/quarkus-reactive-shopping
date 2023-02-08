@@ -68,4 +68,8 @@ public class Product extends PanacheEntityBase {
 
     }
 
+    public String toString() {
+        return "Product id: [" + this.id + "]";
+    }
+
 }
