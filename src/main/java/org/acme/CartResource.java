@@ -2,11 +2,13 @@ package org.acme;
 
 import io.smallrye.mutiny.Uni;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 @Path("/carts")
+@Produces("application/json")
+@Consumes("application/json")
 public class CartResource {
 
     @GET
@@ -22,5 +24,13 @@ public class CartResource {
 
         return Cart.getCartById(id)
                 .onItem().transform(i -> Response.ok(i).build());
+    }
+
+    @POST
+    public Uni<Response> createCart(Cart cart) {
+
+        return Cart.createCart(cart)
+                .onItem()
+                .transform(i -> Response.created(URI.create("/carts/" + i.id)).build());
     }
 }

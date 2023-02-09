@@ -1,5 +1,6 @@
 package org.acme;
 
+import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import io.smallrye.mutiny.Uni;
 
@@ -36,4 +37,19 @@ public class Cart extends PanacheEntityBase {
         return find("#cart.findById", id).firstResult();
     }
 
+    public static Uni<Cart> createCart(String name) {
+
+        Cart newCart = new Cart();
+        newCart.name = name;
+
+        return Panache.withTransaction(newCart::persist).replaceWith(newCart);
+
+    }
+
+    public static Uni<Cart> createCart(Cart cart) {
+
+        return Panache.withTransaction(cart::persist)
+                .replaceWith(cart);
+
+    }
 }
