@@ -15,4 +15,12 @@ public class CartResource {
         return Cart.getAllCarts().onItem()
                 .transform(c -> Response.ok(c).build());
     }
+
+    @GET
+    @Path("{id}")
+    public Uni<Response> getSingle(Long id) {
+
+        return Cart.getCartById(id)
+                .onItem().transform(i -> Response.ok(i).build());
+    }
 }

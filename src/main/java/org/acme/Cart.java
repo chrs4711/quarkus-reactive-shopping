@@ -9,7 +9,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cart")
-@NamedQueries(value = @NamedQuery(name = "cart.findAll", query = "SELECT c FROM Cart c LEFT JOIN FETCH c.cartItems item LEFT JOIN FETCH item.product"))
+@NamedQueries(value = {
+        @NamedQuery(name = "cart.findAll", query = "SELECT c FROM Cart c LEFT JOIN FETCH c.cartItems item LEFT JOIN FETCH item.product"),
+        @NamedQuery(name = "cart.findById", query = "SELECT c FROM Cart c LEFT JOIN FETCH c.cartItems item LEFT JOIN FETCH item.product WHERE c.id = ?1")
+})
 public class Cart extends PanacheEntityBase {
 
     @Id
@@ -27,6 +30,10 @@ public class Cart extends PanacheEntityBase {
 
     public static Uni<List<Cart>> getAllCarts() {
         return find("#cart.findAll").list();
+    }
+
+    public static Uni<Cart> getCartById(Long id) {
+        return find("#cart.findById", id).firstResult();
     }
 
 }
