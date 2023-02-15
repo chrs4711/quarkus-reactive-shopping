@@ -34,4 +34,16 @@ public class CartResource {
                 .onItem()
                 .transform(i -> Response.created(URI.create("/carts/" + i.id)).build());
     }
+
+    @PUT
+    @Path("{cartId}/{productId}")
+    public Uni<Response> addItemToCart(@PathParam("cartId") Long cartId, @PathParam("productId") Long productId) {
+
+        return Cart.addItemToCartAsync(cartId, productId)
+                .onItem()
+                .transform(c -> Response.ok(c).build());
+
+
+        // return Uni.createFrom().item(Response.serverError().status(504).build());
+    }
 }

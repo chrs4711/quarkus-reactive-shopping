@@ -54,6 +54,14 @@ public class CartTest {
 
     }
 
+    @Test
+    public void testAddItemToCart() {
+        given()
+                .when().put("/carts/1/1")
+                .then()
+                .statusCode(200);
+    }
+
     private static Cart getCart() {
         Product p = new Product();
         p.id = 1L;

@@ -52,4 +52,78 @@ public class Cart extends PanacheEntityBase {
                 .replaceWith(cart);
 
     }
+
+    public static Uni<Cart> addItemToCartAsync(Long cartId, Long productId) {
+
+        return Product.findByProductId(productId)
+                .onItem().ifNotNull().transform(product -> {
+
+                    return Cart.getCartById(cartId)
+                            .onItem().ifNotNull().transform(cart -> {
+                                return actuallyAddItemToCart(product, cart);
+                            })
+                            .onItem().ifNotNull().transformToUni(cart -> {
+                               return Panache.withTransaction(cart::persist)
+                                       .replaceWith(cart);
+                            });
+
+                }).onItem().ifNotNull().transformToUni(item -> item);
+        }
+
+    private static Cart actuallyAddItemToCart(Product product, Cart cart) {
+
+        // if item already exists in cart, increment, save and return cart.
+
+        for (CartItem i : cart.cartItems) {
+            if (i.product.id == product.id) {
+                i.quantity += 1;
+                return cart;
+            }
+        }
+
+        cart.cartItems.add(createItemFor(product));
+        return cart;
+    }
+
+    //     return Uni.createFrom().completionStage(() ->
+        //                     Product.findById(productId))
+        //             .onItem().ifNotNull().continueWith(product ->
+        //                     Cart.findById(cartId)
+        //                             .map(cart -> {
+        //                                 // cart.car.add(product);
+        //                                 cart.cartItems.add(product);
+        //                                 return cart;
+        //                             })
+        //             )
+        //             .map(Cart::persist);
+        // }
+
+        // return getCartById(cartId)
+        //         .onItem().transformToUni(cart -> {
+        //
+        //             if (cart==null)
+        //                 return Uni.createFrom().nullItem();
+        //
+        //             System.out.println("cart found");
+        //
+        //             Uni<Product> productUni = Product.findByProductId(productId)
+        //                     .onItem().transformToUni(product -> {
+        //                         if (product == null) {
+        //                             System.out.println("no product");
+        //                             return Uni.createFrom().nullItem();
+        //                         }
+        //
+        //                         System.out.println("product found");
+        //                         return Uni.createFrom().item(product);
+        //                     });
+        //
+        //             return Uni.createFrom().item(cart);
+        //         });
+
+    private static CartItem createItemFor(Product product) {
+        CartItem item = new CartItem();
+        item.product = product;
+        item.quantity = 1;
+        return item;
+    }
 }
