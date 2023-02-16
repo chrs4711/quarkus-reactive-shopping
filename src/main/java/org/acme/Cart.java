@@ -85,11 +85,11 @@ public class Cart extends PanacheEntityBase {
             }
         }
 
-        cart.cartItems.add(createItemFor(product));
+        cart.cartItems.add(createCartItemFor(product));
         return cart;
     }
 
-    private static CartItem createItemFor(Product product) {
+    private static CartItem createCartItemFor(Product product) {
 
         CartItem item = new CartItem();
         item.product = product;
