@@ -73,10 +73,10 @@ public class Cart extends PanacheEntityBase {
 
         return Cart.getCartById(cartId)
                 .onItem()
-                .transform(cart ->  addItemOrIncrement(product, cart));
+                .transform(cart ->  addOrIncrementCartItem(product, cart));
     }
 
-    private static Cart addItemOrIncrement(Product product, Cart cart) {
+    private static Cart addOrIncrementCartItem(Product product, Cart cart) {
 
         for (CartItem i : cart.cartItems) {
             if (i.product.id == product.id) {
