@@ -9,10 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.json.bind.annotation.JsonbDateFormat;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -25,6 +23,9 @@ public class Product extends PanacheEntityBase {
     public String title;
 
     public String description;
+
+    @Column(name = "price", precision = 21, scale = 2)
+    public BigDecimal price;
 
     @CreationTimestamp
     @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")

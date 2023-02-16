@@ -5,6 +5,7 @@ import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import io.smallrye.mutiny.Uni;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -84,6 +85,7 @@ public class Cart extends PanacheEntityBase {
         for (CartItem i : cart.cartItems) {
             if (i.product.id == product.id) {
                 i.quantity += 1;
+                i.totalPrice = product.price.multiply(new BigDecimal(i.quantity));
                 return cart;
             }
         }
@@ -97,6 +99,7 @@ public class Cart extends PanacheEntityBase {
         CartItem item = new CartItem();
         item.product = product;
         item.quantity = 1;
+        item.totalPrice = product.price;
         return item;
     }
 }
