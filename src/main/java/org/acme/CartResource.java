@@ -43,7 +43,5 @@ public class CartResource {
                 .onItem()
                 .transform(c -> Response.ok(c).build());
 
-
-        // return Uni.createFrom().item(Response.serverError().status(504).build());
     }
 }
