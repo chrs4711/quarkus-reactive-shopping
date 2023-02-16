@@ -58,7 +58,7 @@ public class Cart extends PanacheEntityBase {
         return Product.findByProductId(productId)
                 .onItem().ifNotNull()
                 .transformToUni(product -> fetchCartAndAddProduct(cartId, product)
-                .onItem()
+                .onItem().ifNotNull()
                 .transformToUni(cart -> Panache.withTransaction(cart::persist))
                 );
     }
@@ -72,8 +72,8 @@ public class Cart extends PanacheEntityBase {
     private static Uni<Cart> fetchCartAndAddProduct(Long cartId, Product product) {
 
         return Cart.getCartById(cartId)
-                .onItem()
-                .transform(cart ->  addOrIncrementCartItem(product, cart));
+                .onItem().ifNotNull()
+                .transform(cart -> addOrIncrementCartItem(product, cart));
     }
 
     private static Cart addOrIncrementCartItem(Product product, Cart cart) {
