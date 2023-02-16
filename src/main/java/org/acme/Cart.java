@@ -53,7 +53,7 @@ public class Cart extends PanacheEntityBase {
 
     }
 
-    public static Uni<Cart> addItemToCartAsync(Long cartId, Long productId) {
+    public static Uni<Cart> addItemToCart(Long cartId, Long productId) {
 
         return Product.findByProductId(productId)
                 .onItem().ifNotNull().transform(product -> {
@@ -84,41 +84,6 @@ public class Cart extends PanacheEntityBase {
         cart.cartItems.add(createItemFor(product));
         return cart;
     }
-
-    //     return Uni.createFrom().completionStage(() ->
-        //                     Product.findById(productId))
-        //             .onItem().ifNotNull().continueWith(product ->
-        //                     Cart.findById(cartId)
-        //                             .map(cart -> {
-        //                                 // cart.car.add(product);
-        //                                 cart.cartItems.add(product);
-        //                                 return cart;
-        //                             })
-        //             )
-        //             .map(Cart::persist);
-        // }
-
-        // return getCartById(cartId)
-        //         .onItem().transformToUni(cart -> {
-        //
-        //             if (cart==null)
-        //                 return Uni.createFrom().nullItem();
-        //
-        //             System.out.println("cart found");
-        //
-        //             Uni<Product> productUni = Product.findByProductId(productId)
-        //                     .onItem().transformToUni(product -> {
-        //                         if (product == null) {
-        //                             System.out.println("no product");
-        //                             return Uni.createFrom().nullItem();
-        //                         }
-        //
-        //                         System.out.println("product found");
-        //                         return Uni.createFrom().item(product);
-        //                     });
-        //
-        //             return Uni.createFrom().item(cart);
-        //         });
 
     private static CartItem createItemFor(Product product) {
         CartItem item = new CartItem();

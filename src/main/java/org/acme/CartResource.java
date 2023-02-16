@@ -39,7 +39,7 @@ public class CartResource {
     @Path("{cartId}/{productId}")
     public Uni<Response> addItemToCart(@PathParam("cartId") Long cartId, @PathParam("productId") Long productId) {
 
-        return Cart.addItemToCartAsync(cartId, productId)
+        return Cart.addItemToCart(cartId, productId)
                 .onItem()
                 .transform(c -> Response.ok(c).build());
 
