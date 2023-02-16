@@ -1,10 +1,12 @@
 package org.acme;
 
 import io.smallrye.mutiny.Uni;
+import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.Map;
 
 @Path("/carts")
 @Produces("application/json")
@@ -44,4 +46,11 @@ public class CartResource {
                 .transform(c -> Response.ok(c).build());
 
     }
+
+    @ServerExceptionMapper(value = {UnknownCart.class, UnknownProduct.class})
+    public Uni<Response> noSuchCart(Exception e) {
+
+        return Uni.createFrom().item(Response.status(404).entity(Map.of("error", e.getMessage())).build());
+    }
+
 }
