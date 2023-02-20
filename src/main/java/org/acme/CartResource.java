@@ -25,8 +25,7 @@ public class CartResource {
     public Uni<Response> getSingle(Long id) {
 
         return Cart.getCartById(id)
-                .onItem().ifNotNull().transform(i -> Response.ok(i).build())
-                .onItem().ifNull().continueWith(Response.ok().status(404).build());
+                .onItem().ifNotNull().transform(i -> Response.ok(i).build());
     }
 
     @POST
