@@ -35,8 +35,11 @@ public class Cart extends PanacheEntityBase {
     }
 
     public static Uni<Cart> getCartById(Long id) {
-        return find("#cart.findById", id).firstResult();
+
+        return find("#cart.findById", id).<Cart>firstResult()
+                .onItem().ifNull().failWith(UnknownCart::new);
     }
+
 
     public static Uni<Cart> createCart(String name) {
 

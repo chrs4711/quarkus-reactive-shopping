@@ -48,7 +48,7 @@ public class CartResource {
     }
 
     @ServerExceptionMapper(value = {UnknownCart.class, UnknownProduct.class})
-    public Uni<Response> noSuchCart(Exception e) {
+    public Uni<Response> error(Exception e) {
 
         return Uni.createFrom().item(Response.status(404).entity(Map.of("error", e.getMessage())).build());
     }
