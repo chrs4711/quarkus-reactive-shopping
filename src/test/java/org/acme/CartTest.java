@@ -55,11 +55,22 @@ public class CartTest {
     }
 
     @Test
-    public void testAddItemToCart() {
+    public void testIncrementItemQuantity() {
         given()
                 .when().put("/carts/1/1")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .body("cartItems.find{it}.quantity", is(3));
+
+    }
+
+    @Test
+    public void testAddNewItemToCart() {
+        given()
+                .when().put("/carts/1/2")
+                .then()
+                .statusCode(200)
+                .body("cartItems.find {it.product.id == 2}.quantity", is(1));
     }
 
     private static Cart getCart() {
